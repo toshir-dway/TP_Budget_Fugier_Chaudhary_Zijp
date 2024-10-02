@@ -12,7 +12,10 @@ def calculer_moyenne_depenses_par_categorie(df, categories):
     for cat in categories:
         data = df[df['category'] == cat]
         depenses = data['value'].to_list()
-        resultats[cat] = sum(depenses) / len(depenses)
+        if len(depenses) == 0:
+            resultats[cat] = 0:
+        else :
+            resultats[cat] = sum(depenses) / len(depenses)
 
     return resultats
 
