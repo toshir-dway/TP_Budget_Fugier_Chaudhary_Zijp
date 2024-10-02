@@ -56,8 +56,3 @@ def add_expense():
 
     return category, description, value
 
-category, description, value = add_expense()
-print(category, description, value)
-
-def test_add_expense():
-    pass
