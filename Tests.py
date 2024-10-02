@@ -1,5 +1,8 @@
-def test_wont_work(x):
-    return x/0
+import pytest
 
-result = wont_work(1)
-print(result)
+def wont_work(x):
+    return x / 0
+
+def test_wont_work():
+    with pytest.raises(ZeroDivisionError):
+        wont_work(1)
