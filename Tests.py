@@ -4,39 +4,56 @@ import numpy as np
 import random
 import unittest
 
-# Set random seed for reproducibility
-random.seed(42)
-np.random.seed(42)
 
-# Define the number of rows
-num_rows = 10
 
-# Create random data
-categories = ['food', 'house', 'travels']
-descriptions = [
-    'This is a description of item A.',
-    'This is a description of item B.',
-    'This is a description of item C.',
-    'This item is related to A.',
-    'This item is related to B.',
-    'This item is related to C.',
-    'Additional information for A.',
-    'Additional information for B.',
-    'Additional information for C.',
-    'Generic item description.'
-]
 
-# Generate random data for DataFrame
-data = {
-    'category': [random.choice(categories) for _ in range(num_rows)],
-    'description': [random.choice(descriptions) for _ in range(num_rows)],
-    'values': np.random.randint(1, 100, size=num_rows)
-}
 
-# Create DataFrame
-df = pd.DataFrame(data)
+def calculer_moyenne_depenses_par_categorie(df, categories):
+    resultats = {}
+    for cat in categories:
+        data = df[df['category'] == cat]
+        depenses = data['value'].to_list()
+        resultats[cat] = sum(depenses) / len(depenses)
 
-print(df)
+    return resultats
+
+
+class TestCalculerMoyenneDepenses(unittest.TestCase):
+
+    def setUp(self):
+        # Créer un DataFrame d'exemple
+        self.df = pd.DataFrame({
+            'category': ['Food', 'Transport', 'Food', 'Utilities'],
+            'value': [100, 200, 300, 400]
+        })
+        self.categories = ['Food', 'Transport', 'Utilities', 'Entertainment']
+
+    def test_depenses_avec_categorie(self):
+        # Test avec des dépenses existantes
+        resultats = calculer_moyenne_depenses_par_categorie(self.df, self.categories)
+        self.assertEqual(resultats['Food'], 200.0)  # (100 + 300) / 2
+        self.assertEqual(resultats['Transport'], 200.0)  # valeur unique 200
+        self.assertEqual(resultats['Utilities'], 400.0)  # valeur unique 400
+
+    def test_depenses_sans_categorie(self):
+        # Test avec une catégorie sans dépenses
+        resultats = calculer_moyenne_depenses_par_categorie(self.df, self.categories)
+        self.assertEqual(resultats['Entertainment'], 0)  # Pas de dépenses pour 'Entertainment'
+
+    def test_depenses_vide(self):
+        # Test avec un DataFrame vide
+        empty_df = pd.DataFrame(columns=['category', 'value'])
+        resultats = calculer_moyenne_depenses_par_categorie(empty_df, self.categories)
+        self.assertEqual(resultats['Food'], 0)  # Pas de dépenses pour 'Food'
+        self.assertEqual(resultats['Transport'], 0)  # Pas de dépenses pour 'Transport'
+
+if __name__ == '__main__':
+    unittest.main()
+
+#python -m unittest <nom_du_fichier>.py
+
+
+
 
 
 def add_expense():
@@ -57,88 +74,9 @@ def add_expense():
 
     return category, description, value
 
-category, description, value = add_expense()
-print(category, description, value)
 
 def test_add_expense():
     pass
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Exemple de fonction existante (avec un bug potentiel)
-def calculer_moyenne_depenses(depenses):
-    return sum(depenses) / len(depenses)
-
-class TestCalculerMoyenneDepenses(unittest.TestCase):
-    
-    def test_depenses_avec_valeurs(self):
-        # Test avec des dépenses non nulles
-        depenses = [100, 200, 300]
-        resultat = calculer_moyenne_depenses(depenses)
-        self.assertEqual(resultat, 200)
-
-    def test_depenses_vides(self):
-        # Test avec une liste vide, doit lever une exception ou retourner 0
-        depenses = []
-        with self.assertRaises(ZeroDivisionError):
-            calculer_moyenne_depenses(depenses)
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-
-
-
-
-#Corriger la fonction pour passer le test
-
-def calculer_moyenne_depenses(depenses):
-    if not depenses:  # Si la liste est vide
-        return 0  # On retourne 0 au lieu de lever une erreur
-    return sum(depenses) / len(depenses)
-
-
-#Améliorer les tests
-
-class TestCalculerMoyenneDepenses(unittest.TestCase):
-    
-    def test_depenses_avec_valeurs(self):
-        depenses = [100, 200, 300]
-        resultat = calculer_moyenne_depenses(depenses)
-        self.assertEqual(resultat, 200)
-
-    def test_depenses_vides(self):
-        depenses = []
-        resultat = calculer_moyenne_depenses(depenses)
-        self.assertEqual(resultat, 0)  # Vérifie que le résultat est 0 pour une liste vide
-
-    def test_depenses_negatives(self):
-        depenses = [-50, -150, -100]
-        resultat = calculer_moyenne_depenses(depenses)
-        self.assertEqual(resultat, -100)
-
-    def test_depenses_avec_zero(self):
-        depenses = [0, 0, 0]
-        resultat = calculer_moyenne_depenses(depenses)
-        self.assertEqual(resultat, 0)
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-#pour lancer le  test
-#python -m unittest <nom_du_fichier>.py
