@@ -91,9 +91,14 @@ def accueil():
         fonctionnalite = input("Choisissez une option: ")
 
         if fonctionnalite == "1":
-            # Fonction ajouter une dépense
-            print("Ajout d'une dépense...")
-            add_expense()
+            category, description, value = add_expense()
+            # Create a new row as a dictionary
+            new_row = {'Category': category, 'Description': description, 'Value': value, 'Type': 'expense'}
+            # Append the new row to the DataFrame
+            df = df.append(new_row, ignore_index=True)
+            print("Dépense ajoutée avec succès.")
+            print(df)  # Display the updated DataFrame
+
         elif fonctionnalite == "2":
             # Fonction ajouter un revenu
             print("Ajout d'un revenu...")
