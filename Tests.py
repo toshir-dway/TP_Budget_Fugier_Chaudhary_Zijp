@@ -1,11 +1,10 @@
 import pytest
 import pandas as pd
 import numpy as np
-import random
 import unittest
 
 
-
+categories = []
 
 
 def calculer_moyenne_depenses_par_categorie(df, categories):
@@ -27,7 +26,7 @@ class TestCalculerMoyenneDepenses(unittest.TestCase):
             'value': [100, 200, 300, 400]
         })
         self.categories = ['Food', 'Transport', 'Utilities', 'Entertainment']
-
+    
     def test_depenses_avec_categorie(self):
         # Test avec des dépenses existantes
         resultats = calculer_moyenne_depenses_par_categorie(self.df, self.categories)
@@ -50,13 +49,13 @@ class TestCalculerMoyenneDepenses(unittest.TestCase):
 if __name__ == '__main__':
     unittest.main()
 
-#python -m unittest <nom_du_fichier>.py
+#python -m unittest Tests.py
 
 
 
 
 
-def add_expense():
+"""def add_expense():
     category = input("Quelle est la categorie de cette depense ?")
     while category not in categories:
         print("La valeur doit être une categorie valide.")
@@ -78,5 +77,5 @@ def add_expense():
 def test_add_expense():
     pass
 
-
+"""
 
