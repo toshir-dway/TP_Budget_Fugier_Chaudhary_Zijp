@@ -37,7 +37,7 @@ jobs:
 
     - name: Run tests with pytest and coverage
       run: |
-        pytest --cov=your_module Tests/
+        pytest --cov=app test/
         coverage report
         coverage xml
         coverage html
