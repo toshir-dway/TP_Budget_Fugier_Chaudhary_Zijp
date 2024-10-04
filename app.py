@@ -93,17 +93,17 @@ class ExpenseManager:
             choice = input("Choisissez une option: ")
 
             if choice == "1":
-                self.add_expense_interactively()
-                print(self.df)  # Display the updated DataFrame
-            
-            if choice == "2":
-                self.add_revenue_interactively()
-                print(self.df)  # Display the updated DataFrame
+                if self.add_expense_interactively() is False:
+                    continue  # If adding expense failed, re-prompt
+
+            elif choice == "2":
+                if self.add_revenue_interactively() is False:
+                    continue  # If adding revenue failed, re-prompt
 
             elif choice == "3":
                 # Calculate total balance
                 print("Calcul du solde total...")
-                total = self.df['Value'].sum()
+                total = self.df['Value'].sum() if not self.df.empty else 0
                 print(f"Le solde total est: {total}")
 
             elif choice == "4":
