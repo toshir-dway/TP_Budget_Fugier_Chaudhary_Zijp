@@ -1,6 +1,10 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pandas as pd
 import unittest
 from app import ExpenseManager  # Make sure to import your ExpenseManager class
+
 
 class TestExpenseManager(unittest.TestCase):
 
