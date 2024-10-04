@@ -136,12 +136,59 @@ class TestExpenseManagerInteractive(unittest.TestCase):
     def test_add_expense_interactively_invalid_value(self, mock_input):
         """Test re-prompting for a valid integer value."""
         result = self.manager.add_expense_interactively()  # Call the method
-        self.assertTrue(result)  # Check if the method returns True after a valid integer is finally provided
+        self.assertTrue(result)  
         self.assertEqual(len(self.manager.df), 1)  # Check that one expense was added
         self.assertEqual(self.manager.df.iloc[0]['Category'], 'Food')  # Validate the category
         self.assertEqual(self.manager.df.iloc[0]['Description'], 'Test Description')  # Validate the description
         self.assertEqual(self.manager.df.iloc[0]['Value'], -100)  # Validate the value (should be negative)
 
+    @patch('builtins.input', side_effect=['1', 'Food', '100', 'Test Expense', '5'])
+    def test_accueil_add_expense(self, mock_input):
+        """Test adding an expense through the menu."""
+        with patch('builtins.print') as mock_print:
+            self.manager.accueil()
+            self.assertIn("Dépense ajoutée avec succès.", [call[0][0] for call in mock_print.call_args_list])
+            self.assertEqual(len(self.manager.df), 1)  # Check that one expense was added
+
+    @patch('builtins.input', side_effect=['2', 'Test Revenue', '200', '5'])
+    def test_accueil_add_revenue(self, mock_input):
+        """Test adding a revenue through the menu."""
+        with patch('builtins.print') as mock_print:
+            self.manager.accueil()
+            self.assertIn("Dépense ajoutée avec succès.", [call[0][0] for call in mock_print.call_args_list])
+            self.assertEqual(len(self.manager.df), 1)  # Check that one revenue was added
+
+    @patch('builtins.input', side_effect=['3', '5'])
+    def test_accueil_calculate_balance(self, mock_input):
+        """Test calculating the total balance."""
+        self.manager.add_expense('Food', 100, 'Test Expense')
+        self.manager.add_revenue('Revenu', 200, 'Test Revenue')
+        with patch('builtins.print') as mock_print:
+            self.manager.accueil()
+            self.assertIn("Le solde total est: 100", [call[0][0] for call in mock_print.call_args_list])
+
+    @patch('builtins.input', side_effect=['4', '5'])
+    def test_accueil_summary(self, mock_input):
+        """Test getting the summary by category."""
+        self.manager.add_expense('Food', 100, 'Test Expense')
+        self.manager.add_revenue('Revenu', 200, 'Test Revenue')
+        with patch('builtins.print') as mock_print:
+            self.manager.accueil()
+            self.assertIn("Calcul de la répartition par catégories...", [call[0][0] for call in mock_print.call_args_list])
+
+    @patch('builtins.input', side_effect=['99', '1', 'Food', '100', 'Test Expense', '5'])
+    def test_accueil_invalid_option(self, mock_input):
+        """Test handling of an invalid option."""
+        with patch('builtins.print') as mock_print:
+            self.manager.accueil()
+            self.assertIn("Option invalide, veuillez réessayer.", [call[0][0] for call in mock_print.call_args_list])
+
+    @patch('builtins.input', side_effect=['5'])
+    def test_accueil_exit(self, mock_input):
+        """Test exiting the menu."""
+        with patch('builtins.print') as mock_print:
+            self.manager.accueil()
+            self.assertIn("Au revoir!", [call[0][0] for call in mock_print.call_args_list])
 
 if __name__ == '__main__':
     unittest.main()
