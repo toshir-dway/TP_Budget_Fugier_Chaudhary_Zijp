@@ -138,17 +138,17 @@ def step_impl(context):
 
 @then(u'the average for "Food" should be 200')
 def step_impl(context):
-    assert context.avg_expenses.Food == 200
+    assert context.avg_expenses.Category.Food == 200
 
 
 @then(u'the average for "Transport" should be 200')
 def step_impl(context):
-    assert context.avg_expenses.Food == 200
+    assert context.avg_expenses.Category.Transport == 200
 
 
 @then(u'the average for "Utilities" should be 0')
 def step_impl(context):
-    assert context.avg_expenses.Food == 0
+    assert context.avg_expenses.Category.Utilities == 0
 
 
 # Répartition des catégories
