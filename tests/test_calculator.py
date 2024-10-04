@@ -130,12 +130,16 @@ class TestExpenseManagerInteractive(unittest.TestCase):
         self.assertFalse(result)  # Check if the method returned False due to invalid category
         self.assertEqual(len(self.manager.df), 0)
 
-    @patch('builtins.input', side_effect=['Food', 'Test Description', 'invalid_value'])
+    @patch('builtins.input', side_effect=['Food', 'Test Description', 'invalid_value', '100'])
+    
     def test_add_expense_interactively_invalid_value(self, mock_input):
         """Test re-prompting for a valid integer value."""
         result = self.manager.add_expense_interactively()  # Call the method
-        self.assertFalse(result) 
-        self.assertEqual(len(self.manager.df), 0)
+        self.assertTrue(result)  # Check if the method returns True after a valid integer is finally provided
+        self.assertEqual(len(self.manager.df), 1)  # Check that one expense was added
+        self.assertEqual(self.manager.df.iloc[0]['Category'], 'Food')  # Validate the category
+        self.assertEqual(self.manager.df.iloc[0]['Description'], 'Test Description')  # Validate the description
+        self.assertEqual(self.manager.df.iloc[0]['Value'], -100)  # Validate the value (should be negative)
 
 
 if __name__ == '__main__':
