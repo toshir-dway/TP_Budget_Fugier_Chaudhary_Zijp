@@ -27,6 +27,9 @@ class ExpenseManager:
         except ValueError:
             raise ValueError(f"Invalid value: {value}. The value must be a number.")
 
+        if value < 0:
+            raise ValueError("Revenue cannot be negative.")
+    
         new_row = {'Category': category, 'Value': value, 'Type': 'Revenu', 'Description': description}
         self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
 
