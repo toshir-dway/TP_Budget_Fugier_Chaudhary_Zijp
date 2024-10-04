@@ -6,7 +6,7 @@ Feature: Ajouter une dépense
   Scenario: Ajouter une dépense avec des détails valides
     Given que je suis sur la page d'ajout de dépense
     When je saisis "Alimentation" comme catégorie
-    And je saisis "Courses du mois" comme description
+    And je saisis "Food" comme description
     And je saisis "150" comme montant
     And je valide l'ajout de la dépense
     Then la dépense doit être ajoutée à ma liste de dépenses
