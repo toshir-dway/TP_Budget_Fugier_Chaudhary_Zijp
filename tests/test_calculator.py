@@ -6,6 +6,13 @@ import unittest
 from app import ExpenseManager 
 from unittest.mock import patch
 
+##################################
+## Fichier de Test uniquement ####
+##################################
+
+
+# class Test 
+
 class TestExpenseManager(unittest.TestCase):
 
     def setUp(self):
@@ -21,6 +28,9 @@ class TestExpenseManager(unittest.TestCase):
             'Description': ['Groceries', 'Bus fare', 'Dinner', 'Electricity bill']
         })
 
+
+    # calculates average expense values based on mocked
+
     def test_average_expenses_with_categories(self):
         """Test with existing expenses."""
         expected_avg_food = (-100 - 300) / 2  
@@ -33,17 +43,21 @@ class TestExpenseManager(unittest.TestCase):
         self.assertAlmostEqual(summary.loc[summary['Category'] == 'Transport', 'Value'].values[0], expected_avg_transport)
         self.assertAlmostEqual(summary.loc[summary['Category'] == 'Utilities', 'Value'].values[0], expected_avg_utilities)
 
+
+    # verify that the category "Entertainment" does not appear in the summary generated
     def test_expenses_without_category(self):
         """Test with a category that has no expenses."""
         summary = self.manager.get_summary()
         self.assertNotIn('Entertainment', summary['Category'].values)
 
+    # when there are no expenses in the system
     def test_empty_expenses(self):
         """Test with an empty DataFrame."""
         empty_manager = ExpenseManager() 
         empty_summary = empty_manager.get_summary()
         self.assertTrue(empty_summary.empty)  
 
+    # new expense is correctly added ?
     def test_add_expense(self):
         """Test adding an expense."""
         initial_count = len(self.manager.df)
@@ -53,6 +67,7 @@ class TestExpenseManager(unittest.TestCase):
         self.assertEqual(self.manager.df.iloc[-1]['Value'], -150)
         self.assertEqual(self.manager.df.iloc[-1]['Description'], 'Snacks')
 
+    #verifies the functionality of the add_revenue method in the ExpenseManager class. 
     def test_add_revenue(self):
         """Test adding a revenue."""
         initial_count = len(self.manager.df)
@@ -127,31 +142,31 @@ class TestExpenseManagerInteractive(unittest.TestCase):
     @patch('builtins.input', side_effect=['InvalidCategory', 'Food', 'Test Description', '100'])
     def test_add_expense_interactively_invalid_category(self, mock_input):
         """Test re-prompting for a valid category."""
-        result = self.manager.add_expense_interactively()  # Call the method
-        self.assertFalse(result)  # Check if the method returned False due to invalid category
+        result = self.manager.add_expense_interactively()  
+        self.assertFalse(result)  
         self.assertEqual(len(self.manager.df), 0)
 
     @patch('builtins.input', side_effect=['Food', 'Test Description', 'invalid_value', '100'])
     
     def test_add_expense_interactively_invalid_value(self, mock_input):
         """Test re-prompting for a valid integer value."""
-        result = self.manager.add_expense_interactively()  # Call the method
+        result = self.manager.add_expense_interactively()  
         self.assertTrue(result)  
-        self.assertEqual(len(self.manager.df), 1)  # Check that one expense was added
-        self.assertEqual(self.manager.df.iloc[0]['Category'], 'Food')  # Validate the category
-        self.assertEqual(self.manager.df.iloc[0]['Description'], 'Test Description')  # Validate the description
-        self.assertEqual(self.manager.df.iloc[0]['Value'], -100)  # Validate the value (should be negative)
+        self.assertEqual(len(self.manager.df), 1) 
+        self.assertEqual(self.manager.df.iloc[0]['Category'], 'Food')  
+        self.assertEqual(self.manager.df.iloc[0]['Description'], 'Test Description')  
+        self.assertEqual(self.manager.df.iloc[0]['Value'], -100)  
 
 
-
+   # Check if the success message is printed
     @patch('builtins.input', side_effect=['2', 'Test Revenue', '200', '5'])
     def test_accueil_add_revenue(self, mock_input):
         """Test adding a revenue through the menu."""
         with patch('builtins.print') as mock_print:
             self.manager.accueil()
-            # Check if the success message is printed
+            
             self.assertIn("Revenu ajouté avec succès.", [call[0][0] for call in mock_print.call_args_list])
-            self.assertEqual(len(self.manager.df), 1)  # Ensure one revenue is added
+            self.assertEqual(len(self.manager.df), 1)  
     @patch('builtins.input', side_effect=['5'])
     def test_accueil_exit(self, mock_input):
         """Test exiting the menu."""
