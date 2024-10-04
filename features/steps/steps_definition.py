@@ -120,35 +120,39 @@ def step_impl(context):
 
 
 
-#expensesCalc
+#expenseCalc
 
 @given(u'I have the following expenses')
 def step_impl(context):
     context.expenses = pd.DataFrame(columns=['Type', 'Category', 'Value', 'Description'])
     for row in context.table:
-        new_row = {'Type': row['Type'], 'Category': row['Category'], 'value': int(row['value']), 'Description': row['Description']}
+        new_row = {
+            'Type': row['Type'], 
+            'Category': row['Category'], 
+            'Value': int(row['Value']),
+            'Description': row['Description']
+        }
         context.expenses = pd.concat([context.expenses, pd.DataFrame([new_row])], ignore_index=True)
-
 
 @when(u'I calculate the average expenses per category')
 def step_impl(context):
-    context.avg_expenses = context.expenses.groupby('Category')['value'].mean().reset_index()
-
-
+    context.avg_expenses = context.expenses.groupby('Category')['Value'].mean().reset_index()
 
 @then(u'the average for "Food" should be 200')
 def step_impl(context):
-    assert context.avg_expenses.Category.Food == 200
-
+    food_average = context.avg_expenses.loc[context.avg_expenses['Category'] == 'Food', 'Value']
+    assert food_average.values[0] == 200, f"Expected average for Food to be 200 but got {food_average.values[0]}"
 
 @then(u'the average for "Transport" should be 200')
 def step_impl(context):
-    assert context.avg_expenses.Category.Transport == 200
-
+    transport_average = context.avg_expenses.loc[context.avg_expenses['Category'] == 'Transport', 'Value']
+    assert transport_average.values[0] == 200, f"Expected average for Transport to be 200 but got {transport_average.values[0]}"
 
 @then(u'the average for "Utilities" should be 0')
 def step_impl(context):
-    assert context.avg_expenses.Category.Utilities == 0
+    utilities_average = context.avg_expenses.loc[context.avg_expenses['Category'] == 'Utilities', 'Value']
+    assert utilities_average.empty or utilities_average.values[0] == 0, f"Expected average for Utilities to be 0 but got {utilities_average.values[0] if not utilities_average.empty else 'No data'}"
+
 
 
 # Répartition des catégories
