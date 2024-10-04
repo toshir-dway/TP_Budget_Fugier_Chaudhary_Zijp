@@ -126,8 +126,9 @@ class TestExpenseManagerInteractive(unittest.TestCase):
     @patch('builtins.input', side_effect=['InvalidCategory', 'Food', 'Test Description', '100'])
     def test_add_expense_interactively_invalid_category(self, mock_input):
         """Test re-prompting for a valid category."""
-        with self.assertRaises(SystemExit):
-            self.manager.add_expense_interactively()
+        result = self.manager.add_expense_interactively()  # Call the method
+        self.assertFalse(result)  # Check if the method returned False due to invalid category
+        self.assertEqual(len(self.manager.df), 0)
 
     @patch('builtins.input', side_effect=['Food', 'Test Description', 'invalid_value'])
     def test_add_expense_interactively_invalid_value(self, mock_input):
