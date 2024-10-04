@@ -132,7 +132,7 @@ def step_impl(context):
 
 @when(u'I calculate the average expenses per category')
 def step_impl(context):
-    context.avg_expenses = context.expenses.groupby('category')['value'].mean().reset_index()
+    context.avg_expenses = context.expenses.groupby('Category')['value'].mean().reset_index()
 
 
 
