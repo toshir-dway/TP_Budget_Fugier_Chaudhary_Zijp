@@ -45,9 +45,8 @@ class ExpenseManager:
 
     def add_expense_interactively(self):
         category = input("Quelle est la categorie de cette depense ? 'Food', 'Transport', 'Utilities', 'Entertainment', 'Revenu' ")
-        while category not in self.categories:
-            print("La valeur doit être une categorie valide.")
-            category = input("Quelle est la catégorie de cette dépense ? 'Food', 'Transport', 'Utilities', 'Entertainment', 'Revenu'")
+        if category not in self.categories:
+            raise SystemExit("La valeur doit être une catégorie valide.")
 
         description = input("Quelle est la description de cette depense ? ")
         value = input("Quelle est la valeur de cette depense ? ")
