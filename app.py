@@ -12,7 +12,7 @@ class ExpenseManager:
         self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
 
     def add_revenue(self, category, value, description):
-        new_row = {'Category': category, 'Value': value, 'Type': 'expense', 'Description': description}
+        new_row = {'Category': category, 'Value': value, 'Type': 'Revenu', 'Description': description}
         self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
 
     def calculate_average_expenses(self):
