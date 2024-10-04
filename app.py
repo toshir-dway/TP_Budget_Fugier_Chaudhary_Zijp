@@ -8,9 +8,12 @@ class ExpenseManager:
         self.categories = ['Food', 'Transport', 'Utilities', 'Entertainment', 'Revenu']
 
     def add_expense(self, category, value, description):
+        if category not in self.categories:
+            raise ValueError(f"Invalid category: {category}. Valid categories are: {', '.join(self.categories)}")
+        
         new_row = {'Category': category, 'Value': -abs(value), 'Type': 'expense', 'Description': description}
         self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
-
+    
     def add_revenue(self, category, value, description):
         new_row = {'Category': category, 'Value': value, 'Type': 'Revenu', 'Description': description}
         self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
