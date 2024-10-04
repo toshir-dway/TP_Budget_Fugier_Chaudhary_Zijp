@@ -167,5 +167,34 @@ class TestExpenseManagerInteractive(unittest.TestCase):
             self.manager.accueil()
             self.assertIn("Calcul de la répartition par catégories...", [call[0][0] for call in mock_print.call_args_list])
 
+class TestExpenseManagerIntegration(unittest.TestCase):
+
+    def setUp(self):
+        self.manager = ExpenseManager()
+
+    @patch('builtins.input', side_effect=['Food', 'Test Description', '100'])
+    def test_integration_add_expense_and_calculate_balance(self, mock_input):
+        """Test adding an expense and calculating the balance."""
+        self.manager.add_expense_interactively()  # Add expense
+        total = self.manager.df['Value'].sum()  # Calculate total
+        self.assertEqual(total, -100)  # Check balance
+
+    @patch('builtins.input', side_effect=['Revenu', 'Test Revenue', '200'])
+    def test_integration_add_revenue_and_calculate_balance(self, mock_input):
+        """Test adding a revenue and calculating the balance."""
+        self.manager.add_revenue_interactively()  # Add revenue
+        total = self.manager.df['Value'].sum()  # Calculate total
+        self.assertEqual(total, 200)  # Check balance
+
+    @patch('builtins.input', side_effect=['Food', 'Test Description', '100', 'Revenu', 'Test Revenue', '200'])
+    def test_integration_full_flow(self, mock_input):
+        """Test the full flow of adding expense, revenue, and calculating balance."""
+        self.manager.add_expense_interactively()  # Add expense
+        self.manager.add_revenue_interactively()  # Add revenue
+        total = self.manager.df['Value'].sum()  # Calculate total
+        self.assertEqual(total, 100)  # Check final balance
+
+
+
 if __name__ == '__main__':
     unittest.main()
