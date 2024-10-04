@@ -28,7 +28,7 @@ class TestCalculerMoyenneDepenses(unittest.TestCase):
             'category': ['Food', 'Transport', 'Food', 'Utilities'],
             'value': [100, 200, 300, 400]
         })
-        self.categories = ['Food', 'Transport', 'Utilities', 'Entertainment']
+        self.categories = ['Food', 'Transport', 'Utilities', 'Entertainment', 'Revenu']
     
     def test_depenses_avec_categorie(self):
         # Test avec des dépenses existantes
@@ -77,11 +77,7 @@ def add_expense():
     return category, description, value
 
 
-def test_add_expense():
-    pass
-
-
-def accueil():
+def accueil(df = pd.DataFrame()):
     while True:  # Create a loop to allow repeated menu access
         print("Ajouter une dépense : 1")
         print("Ajouter un revenu : 2")
@@ -117,5 +113,5 @@ def accueil():
         else:
             print("Option invalide, veuillez réessayer.")
 
-# Call the accueil function to run the menu
+# run the menu
 accueil()
