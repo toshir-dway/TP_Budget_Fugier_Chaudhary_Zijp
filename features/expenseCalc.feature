@@ -3,7 +3,7 @@ Feature: Expense Calculation
 
   Scenario: Calculating the average expenses per category
     Given I have the following expenses
-      | Category   | value | Type    | Description |
+      | Category   | Value | Type    | Description |
       | Food       | 100   | Expense | mcdo        |
       | Transport  | 200   | Expense | pizza       |
       | Food       | 300   | Expense | chiken      |
