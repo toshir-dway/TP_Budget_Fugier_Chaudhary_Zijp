@@ -89,3 +89,32 @@ def step_impl(context):
 def step_impl(context):
     context.confirmation_message = "Revenu ajoutée avec succès"
     assert context.confirmation_message == "Revenu ajoutée avec succès"
+
+
+
+
+# CALCULER LE SOLDE
+
+@given(u'que j\'ai ajouté une dépense de "150"')
+def step_impl(context):
+    context.df = pd.DataFrame(columns=['Type', 'Category', 'Value', 'Description'])
+    new_row = {'Type': 'Expense', 'Category': 'Alimentation', 'Value': 150, 'Description': 'Courses'}
+    context.df = pd.concat([context.df, pd.DataFrame([new_row])], ignore_index=True)
+
+@given(u'j\'ai ajouté une source de revenu de "2000"')
+def step_impl(context):
+    new_row = {'Type': 'Revenue', 'Category': 'Salaire', 'Value': 2000, 'Description': 'Revenu du mois'}
+    context.df = pd.concat([context.df, pd.DataFrame([new_row])], ignore_index=True)
+
+
+@when(u'je demande à voir mon solde total')
+def step_impl(context):
+    total_revenue = context.df[context.df['Type'] == 'Revenue']['Value'].sum()
+    total_expenses = context.df[context.df['Type'] == 'Expense']['Value'].sum()
+    context.balance = total_revenue - total_expenses
+
+
+@then(u'le solde total doit être "1850"')
+def step_impl(context):
+    assert context.balance == 1850
+

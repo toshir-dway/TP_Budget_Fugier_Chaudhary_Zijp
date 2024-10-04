@@ -5,8 +5,8 @@ Feature: Ajouter une source de revenu
 
   Scenario: Ajouter une source de revenu avec des détails valides
     Given que je suis sur la page d'ajout de revenu
-    When je saisis "Salaire" comme catégorie
-    And je saisis "Salaire du mois" comme description
+    When je saisis "Revenu" comme catégorie
+    And je saisis "Revenu du mois" comme description
     And je saisis "2000" comme montant
     And je valide l'ajout de la source de revenu
     Then la source de revenu doit être ajoutée à ma liste de revenus
