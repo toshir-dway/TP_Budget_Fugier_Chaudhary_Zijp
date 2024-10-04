@@ -47,19 +47,24 @@ class ExpenseManager:
         category = input("Quelle est la categorie de cette depense ? 'Food', 'Transport', 'Utilities', 'Entertainment', 'Revenu' ")
         if category not in self.categories:
             print("La valeur doit être une catégorie valide.")
-            return False
+            return False  # Return False for an invalid category
+
         description = input("Quelle est la description de cette depense ? ")
-        value = input("Quelle est la valeur de cette depense ? ")
+        
         while True:
+            value = input("Quelle est la valeur de cette depense ? ")
             try:
-                value = int(value)
-                break  # Exit the loop if the conversion is successful
+                value = int(value)  # Try converting the input to an integer
+                break  # Exit the loop if conversion is successful
             except ValueError:
                 print("La valeur doit être un nombre entier.")
-                value = input("Quelle est la valeur de cette dépense ? ")
+                # Optionally, you can return False here if you want to exit
+                continue  # Continue prompting until a valid value is given
 
         self.add_expense(category, value, description)
         print("Dépense ajoutée avec succès.")
+        return True  # Return True after successfully adding the expense
+
 
     def add_revenue_interactively(self):
         category = "Revenu"
