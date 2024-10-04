@@ -66,16 +66,17 @@ class ExpenseManager:
         category = "Revenu"
         description = input("Quelle est la description de ce revenu ? ")
         value = input("Quelle est la valeur de ce revenu ? ")
+
         while True:
             try:
                 value = int(value)
                 break  # Exit the loop if the conversion is successful
             except ValueError:
                 print("La valeur doit être un nombre entier.")
-                value = input("Quelle est la valeur de cette dépense ? ")
+                value = input("Quelle est la valeur de ce revenu ? ")
 
         self.add_revenue(category, value, description)
-        print("Dépense ajoutée avec succès.")
+        print("Revenu ajouté avec succès.")
 
     def accueil(self):
         while True:
