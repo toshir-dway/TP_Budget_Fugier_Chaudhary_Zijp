@@ -149,3 +149,38 @@ def step_impl(context):
 @then(u'the average for "Utilities" should be 0')
 def step_impl(context):
     assert context.avg_expenses.Food == 0
+
+
+# Répartition des catégories
+
+@given(u'que j\'ai ajouté une dépense de "100" dans la catégorie "Alimentation"')
+def step_impl(context):
+    if not hasattr(context, 'df'):
+        context.df = pd.DataFrame(columns=['Type', 'Category', 'Value', 'Description'])
+    new_row = {'Type': 'Expense', 'Category': 'Alimentation', 'Value': 100, 'Description': 'Courses'}
+    context.df = pd.concat([context.df, pd.DataFrame([new_row])], ignore_index=True)
+
+@given(u'j\'ai ajouté une dépense de "50" dans la catégorie "Transport"')
+def step_impl(context):
+    new_row = {'Type': 'Expense', 'Category': 'Transport', 'Value': 50, 'Description': 'Revenu du mois'}
+    context.df = pd.concat([context.df, pd.DataFrame([new_row])], ignore_index=True)
+
+@given(u'j\'ai ajouté une dépense de "150" dans la catégorie "Loisirs"')
+def step_impl(context):
+    new_row = {'Type': 'Expense', 'Category': 'Loisirs', 'Value': 150, 'Description': 'fun'}
+    context.df = pd.concat([context.df, pd.DataFrame([new_row])], ignore_index=True)
+
+@when(u'je demande à voir la répartition par catégorie')
+def step_impl(context):
+    context.category_summary = context.df.groupby('Category')['Value'].sum().reset_index()
+
+@then(u'je devrais voir un résumé avec "Alimentation: 100", "Transport: 50", "Loisirs: 150"')
+def step_impl(context):
+    expected_summary = {
+        'Alimentation': 100,
+        'Transport': 50,
+        'Loisirs': 150
+    }
+    for category, expected_value in expected_summary.items():
+        actual_value = context.category_summary.loc[context.category_summary['Category'] == category, 'Value'].values[0]
+        assert actual_value == expected_value, f"Expected {category}: {expected_value}, but got {actual_value}"
