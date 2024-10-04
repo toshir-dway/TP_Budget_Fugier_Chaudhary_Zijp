@@ -118,3 +118,34 @@ def step_impl(context):
 def step_impl(context):
     assert context.balance == 1850
 
+
+
+#expensesCalc
+
+@given(u'I have the following expenses')
+def step_impl(context):
+    context.expenses = pd.DataFrame(columns=['Type', 'Category', 'Value', 'Description'])
+    for row in context.table:
+        new_row = {'Type': row['Type'], 'Category': row['Category'], 'value': int(row['value']), 'Description': row['Description']}
+        context.expenses = pd.concat([context.expenses, pd.DataFrame([new_row])], ignore_index=True)
+
+
+@when(u'I calculate the average expenses per category')
+def step_impl(context):
+    context.avg_expenses = context.expenses.groupby('category')['value'].mean().reset_index()
+
+
+
+@then(u'the average for "Food" should be 200')
+def step_impl(context):
+    assert context.avg_expenses.Food == 200
+
+
+@then(u'the average for "Transport" should be 200')
+def step_impl(context):
+    assert context.avg_expenses.Food == 200
+
+
+@then(u'the average for "Utilities" should be 0')
+def step_impl(context):
+    assert context.avg_expenses.Food == 0
