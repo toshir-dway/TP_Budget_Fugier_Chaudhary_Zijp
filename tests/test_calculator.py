@@ -13,7 +13,8 @@ class TestExpenseManager(unittest.TestCase):
         self.manager = ExpenseManager()
         
         # Add MOCK
-        self.manager.df = pd.DataFrame({
+        
+        self.manager.df = pd.DataFrame({ 
             'Category': ['Food', 'Transport', 'Food', 'Utilities'],
             'Value': [-100, -200, -300, -400],
             'Type': ['expense', 'expense', 'expense', 'expense'],
