@@ -4,6 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pandas as pd
 import unittest
 from app import ExpenseManager 
+from unittest.mock import patch
 
 class TestExpenseManager(unittest.TestCase):
 
@@ -106,6 +107,34 @@ class TestExpenseManager(unittest.TestCase):
         self.manager.add_expense('Food', 0, 'Free meal') 
         self.assertEqual(self.manager.df.iloc[-1]['Value'], 0)
         self.assertEqual(len(self.manager.df), initial_count + 1)
+
+
+class TestExpenseManagerInteractive(unittest.TestCase):
+    def setUp(self):
+        self.manager = ExpenseManager()
+
+    @patch('builtins.input', side_effect=['Food', 'Test Description', '100'])
+    def test_add_expense_interactively_valid(self, mock_input):
+        """Test adding a valid expense interactively."""
+        initial_count = len(self.manager.df)
+        self.manager.add_expense_interactively()
+        self.assertEqual(len(self.manager.df), initial_count + 1)
+        self.assertEqual(self.manager.df.iloc[-1]['Category'], 'Food')
+        self.assertEqual(self.manager.df.iloc[-1]['Value'], -100)
+        self.assertEqual(self.manager.df.iloc[-1]['Description'], 'Test Description')
+
+    @patch('builtins.input', side_effect=['InvalidCategory', 'Food', 'Test Description', '100'])
+    def test_add_expense_interactively_invalid_category(self, mock_input):
+        """Test re-prompting for a valid category."""
+        with self.assertRaises(SystemExit):
+            self.manager.add_expense_interactively()
+
+    @patch('builtins.input', side_effect=['Food', 'Test Description', 'invalid_value'])
+    def test_add_expense_interactively_invalid_value(self, mock_input):
+        """Test re-prompting for a valid integer value."""
+        with self.assertRaises(SystemExit):
+            self.manager.add_expense_interactively()
+
 
 if __name__ == '__main__':
     unittest.main()
