@@ -5,7 +5,7 @@ import unittest
 
 
 categories = []
-
+df = pd.DataFrame()
 
 def calculer_moyenne_depenses_par_categorie(df, categories):
     resultats = {}
