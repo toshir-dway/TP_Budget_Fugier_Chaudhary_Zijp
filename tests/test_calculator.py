@@ -3,8 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pandas as pd
 import unittest
-from app import ExpenseManager  # Make sure to import your ExpenseManager class
-
+from app import ExpenseManager 
 
 class TestExpenseManager(unittest.TestCase):
 
@@ -12,7 +11,7 @@ class TestExpenseManager(unittest.TestCase):
         """Set up an ExpenseManager instance for testing."""
         self.manager = ExpenseManager()
         
-        # Add example expenses directly to the manager's DataFrame for testing
+        # Add MOCK expenses directly to the manager's DataFrame for testing
         self.manager.df = pd.DataFrame({
             'Category': ['Food', 'Transport', 'Food', 'Utilities'],
             'Value': [-100, -200, -300, -400],
