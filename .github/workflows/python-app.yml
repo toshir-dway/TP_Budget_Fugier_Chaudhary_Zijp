@@ -2,36 +2,45 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ]  # This will trigger the workflow on pushes to the main branch
 
 permissions:
-  contents: read
+  contents: read  # Allow reading repository contents
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4  # Check out the code
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
-        python-version: "3.10"
+        python-version: "3.10"  # Use Python 3.10
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest pandas behave # Ajoutez Pandas ici
+        pip install flake8 pytest pandas behave coverage  # Ensure coverage is included
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
     - name: Lint with flake8
       run: |
-        # stop the build if there are Python syntax errors or undefined names
+        # Stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        # Exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
     - name: List files for debugging
+      run: ls -R  # List files recursively for debugging
+
+    - name: Run tests with coverage
       run: |
-        ls -R
+        coverage run -m unittest discover -s Tests -p "*.py"  # Run unittests and track coverage
+        coverage report  # Display coverage in the terminal
+        coverage xml  # Optional: Generate an XML report for tools like SonarCloud
+        coverage html  # Optional: Generate an HTML report to view coverage in a browser
+
     - name: Test with pytest
       run: |
-        pytest
+        pytest  # Run tests with pytest (ensure there are pytest tests)
