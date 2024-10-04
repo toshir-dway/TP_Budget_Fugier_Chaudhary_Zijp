@@ -1,9 +1,11 @@
 from behave import given, when, then
+import pandas as pd
 
 @given(u'que je suis sur la page d\'ajout de dépense')
 def step_impl(context):
-    # Code to navigate to the expense addition page
-    pass
+    context.df = pd.DataFrame(columns=['Type', 'Category', 'Value', 'Description'])
+    context.categories = ['Food', 'Transport', 'Food', 'Utilities']
+    
 
 @when(u'je valide l\'ajout de la dépense')
 def step_impl(context):
