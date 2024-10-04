@@ -10,11 +10,23 @@ class ExpenseManager:
     def add_expense(self, category, value, description):
         if category not in self.categories:
             raise ValueError(f"Invalid category: {category}. Valid categories are: {', '.join(self.categories)}")
-        
+        try:
+            value = float(value)
+        except ValueError:
+            raise ValueError(f"Invalid value: {value}. The value must be a number.")
+
         new_row = {'Category': category, 'Value': -abs(value), 'Type': 'expense', 'Description': description}
         self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
     
     def add_revenue(self, category, value, description):
+        if category not in self.categories:
+            raise ValueError(f"Invalid category: {category}. Valid categories are: {', '.join(self.categories)}")
+        
+        try:
+            value = float(value)
+        except ValueError:
+            raise ValueError(f"Invalid value: {value}. The value must be a number.")
+
         new_row = {'Category': category, 'Value': value, 'Type': 'Revenu', 'Description': description}
         self.df = pd.concat([self.df, pd.DataFrame([new_row])], ignore_index=True)
 
