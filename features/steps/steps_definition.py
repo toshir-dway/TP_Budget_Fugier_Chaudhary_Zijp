@@ -4,20 +4,17 @@ import pandas as pd
 @given(u'que je suis sur la page d\'ajout de dépense')
 def step_impl(context):
     context.df = pd.DataFrame(columns=['Type', 'Category', 'Value', 'Description'])
-    context.categories = ['Food', 'Transport', 'Food', 'Utilities']
+    context.categories = ['Food', 'Transport', 'Utilities']
     
-
 @when(u'je saisis "Alimentation" comme catégorie')
 def step_impl(context):
     context.category = "Alimentation"
     
-
-@then(u'je saisis "Food" comme description')
+@when(u'je saisis "Food" comme description')
 def step_impl(context):
     context.description = "Food"
     
-
-@then(u'je saisis "150" comme montant')
+@when(u'je saisis "150" comme montant')
 def step_impl(context):
     context.value = 150
 
@@ -41,6 +38,7 @@ def step_impl(context):
 def step_impl(context):
     context.confirmation_message = "Dépense ajoutée avec succès"
     assert context.confirmation_message == "Dépense ajoutée avec succès"
+
 
 @then(u'la source de revenu doit être ajoutée à ma liste de revenus')
 def step_impl(context):
