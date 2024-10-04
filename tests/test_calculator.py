@@ -11,7 +11,7 @@ class TestExpenseManager(unittest.TestCase):
         """Set up an ExpenseManager instance for testing."""
         self.manager = ExpenseManager()
         
-        # Add MOCK expenses directly to the manager's DataFrame for testing
+        # Add MOCK
         self.manager.df = pd.DataFrame({
             'Category': ['Food', 'Transport', 'Food', 'Utilities'],
             'Value': [-100, -200, -300, -400],
@@ -34,14 +34,13 @@ class TestExpenseManager(unittest.TestCase):
     def test_expenses_without_category(self):
         """Test with a category that has no expenses."""
         summary = self.manager.get_summary()
-        # Ensure 'Entertainment' is not in summary
         self.assertNotIn('Entertainment', summary['Category'].values)
 
     def test_empty_expenses(self):
         """Test with an empty DataFrame."""
-        empty_manager = ExpenseManager()  # A new instance
+        empty_manager = ExpenseManager() 
         empty_summary = empty_manager.get_summary()
-        self.assertTrue(empty_summary.empty)  # Check if summary is empty
+        self.assertTrue(empty_summary.empty)  
 
     def test_add_expense(self):
         """Test adding an expense."""
@@ -58,7 +57,55 @@ class TestExpenseManager(unittest.TestCase):
         self.manager.add_revenue('Revenu', 500, 'Salary')
         self.assertEqual(len(self.manager.df), initial_count + 1)
         self.assertEqual(self.manager.df.iloc[-1]['Category'], 'Revenu')
-        self.assertEqual(self.manager.df.iloc[-1]['Value'], 500)  # Should be positive for revenue
+        self.assertEqual(self.manager.df.iloc[-1]['Value'], 500)  
+
+    # invalid expense
+    def test_invalid_expense(self):
+        """Test that invalid expenses are not added."""
+        initial_count = len(self.manager.df)
+        with self.assertRaises(ValueError):
+            self.manager.add_expense('Food', 'invalid', 'Snacks')  
+        self.assertEqual(len(self.manager.df), initial_count)
+
+    # invalid revenue
+    def test_invalid_revenue(self):
+        """Test that invalid revenues are not added."""
+        initial_count = len(self.manager.df)
+        with self.assertRaises(ValueError):
+            self.manager.add_revenue('Revenu', 'invalid', 'Bonus')  
+        self.assertEqual(len(self.manager.df), initial_count)
+
+    # negative revenue
+    def test_negative_revenue(self):
+        """Test that negative revenues are not allowed."""
+        initial_count = len(self.manager.df)
+        with self.assertRaises(ValueError):
+            self.manager.add_revenue('Revenu', -500, 'Salary')  
+        self.assertEqual(len(self.manager.df), initial_count)
+
+    # empty description
+    def test_empty_description(self):
+        """Test adding an expense with an empty description."""
+        initial_count = len(self.manager.df)
+        self.manager.add_expense('Food', 50, '') 
+        self.assertEqual(self.manager.df.iloc[-1]['Description'], '')  
+        self.assertEqual(len(self.manager.df), initial_count + 1)
+
+    # invalid category
+    def test_invalid_category(self):
+        """Test adding an expense with a non-existing category."""
+        initial_count = len(self.manager.df)
+        with self.assertRaises(ValueError):
+            self.manager.add_expense('InvalidCategory', 100, 'Test')  
+        self.assertEqual(len(self.manager.df), initial_count)
+
+    # adding an expense with zero value
+    def test_zero_value_expense(self):
+        """Test adding an expense with a value of zero."""
+        initial_count = len(self.manager.df)
+        self.manager.add_expense('Food', 0, 'Free meal') 
+        self.assertEqual(self.manager.df.iloc[-1]['Value'], 0)
+        self.assertEqual(len(self.manager.df), initial_count + 1)
 
 if __name__ == '__main__':
     unittest.main()
